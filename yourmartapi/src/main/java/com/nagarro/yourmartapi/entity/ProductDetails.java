@@ -4,7 +4,9 @@
 package com.nagarro.yourmartapi.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -22,18 +24,23 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.nagarro.yourmartapi.util.EntityIdResolver;
 
 /**
  * @author ishaanvashishth
  *
  */
 @Entity(name = "products")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "productId", resolver = EntityIdResolver.class, scope = ProductDetails.class)
 @Table(name = "products")
 @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class ProductDetails {
@@ -77,11 +84,10 @@ public class ProductDetails {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "seller_id")
-
 	@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "sellerId")
 	@JsonIdentityReference(alwaysAsId = true)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JsonIgnore
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonProperty("seller_id")
 	private SellerDetails seller;
 
 	@Column(name = "comment")
@@ -98,16 +104,10 @@ public class ProductDetails {
 	@ManyToMany(cascade = { CascadeType.MERGE })
 	@JoinTable(name = "product_categories", joinColumns = { @JoinColumn(name = "product_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "category_id") })
-//  @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="productId")
-//  @JsonIdentityReference(alwaysAsId=true)
-//  @JsonProperty("product_id")
-	Set<CategoryDetails> categories = new HashSet<>();
+	List<CategoryDetails> categories = new ArrayList<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
 	private Set<ProductAttributes> productAttributes = new HashSet<>();
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
-	private Set<ImagePaths> imagePaths = new HashSet<>();
 
 	/**
 	 * @param productCode
@@ -362,6 +362,10 @@ public class ProductDetails {
 		return createdAt;
 	}
 
+	public void setCategories(List<CategoryDetails> categories) {
+		this.categories = categories;
+	}
+
 	/**
 	 * @param createdAt the createdAt to set
 	 */
@@ -372,7 +376,7 @@ public class ProductDetails {
 	/**
 	 * @return the categories
 	 */
-	public Set<CategoryDetails> getCategories() {
+	public List<CategoryDetails> getCategories() {
 		return categories;
 	}
 
@@ -399,20 +403,6 @@ public class ProductDetails {
 		this.productAttributes = productAttributes;
 	}
 
-	/**
-	 * @return the imagePaths
-	 */
-	public Set<ImagePaths> getImagePaths() {
-		return imagePaths;
-	}
-
-	/**
-	 * @param imagePaths the imagePaths to set
-	 */
-	public void setImagePaths(Set<ImagePaths> imagePaths) {
-		this.imagePaths = imagePaths;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -429,7 +419,7 @@ public class ProductDetails {
 				.append(", dimensions=").append(dimensions).append(", seller=").append(seller).append(", comment=")
 				.append(comment).append(", updatedAt=").append(updatedAt).append(", createdAt=").append(createdAt)
 				.append(", categories=").append(categories).append(", productAttributes=").append(productAttributes)
-				.append(", imagePaths=").append(imagePaths).append("]");
+				.append("]");
 		return builder.toString();
 	}
 

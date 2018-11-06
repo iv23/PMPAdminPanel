@@ -45,6 +45,8 @@ public class YourmartapiApplication implements CommandLineRunner{
 	@Override
 	@Transactional
 	public void run(String... args) throws Exception {
+		
+		logger.info(userRepository.findByYourmartId("admin1").toString());
 //		ProductPredicate spec = new ProductPredicate(new SearchCriteria("productCode",SearchOperation.CONTAINS,"abc"));
 //		ProductPredicatesBuilder builder = new ProductPredicatesBuilder().with("productCode", ":", "abc"); 
 //		Iterable<ProductDetails> products = productRepository.findAll(builder.build());

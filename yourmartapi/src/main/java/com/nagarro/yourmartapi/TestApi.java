@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nagarro.yourmartapi.entity.CategoryDetails;
+import com.nagarro.yourmartapi.entity.ImagePaths;
 import com.nagarro.yourmartapi.entity.ProductDetails;
 import com.nagarro.yourmartapi.entity.SellerDetails;
 import com.nagarro.yourmartapi.repository.ProductRepository;
@@ -70,9 +71,9 @@ public class TestApi {
 	}
 
 	@GetMapping(value = "/sellers/{sellerId}/products/filter")
-	public Iterable<ProductDetails> findPaginated(@PathVariable(value = "sellerId") Integer sellerId,
+	public Page<ProductDetails> findPaginated(@PathVariable(value = "sellerId") Integer sellerId,
 			@RequestParam(value = "search") String search, Pageable pageable) {
-		search = search + ",seller:" + Integer.toString(sellerId);
+//		search = search + ",seller:" + Integer.toString(sellerId);
 		ProductPredicatesBuilder builder = new ProductPredicatesBuilder();
 		if (search != null) {
 			Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
@@ -81,20 +82,35 @@ public class TestApi {
 				builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
 			}
 		}
-
 		BooleanExpression exp = builder.build();
+		
 		return productsRepository.findAll(exp, pageable);
 	}
 
 	@PostMapping("/sellers/{sellerId}/products")
 	public ProductDetails addProduct(@RequestBody ProductDetails product,@PathVariable(value = "sellerId") Integer sellerId){
-		product.setSeller(sellerService.getSellerById(sellerId));
-		return sellerService.addOrUpdateProductForSeller(product);
+		SellerDetails seller = sellerService.getSellerById(sellerId);
+		if(product.getSeller()== null)
+			product.setSeller(seller);
+		else {
+
+			logger.info(product.getSeller().toString());
+		}
+		return sellerService.addProductForSeller(product);
 	}
 	
 	@PutMapping("/sellers/{sellerId}/products")
 	public ProductDetails updateProduct(@RequestBody ProductDetails product){
-		return sellerService.addOrUpdateProductForSeller(product);
+		return sellerService.updateProductForSeller(product);
+	}
+	
+	@PostMapping("/sellers/{sellerId}/products/{productId}/images")
+	public List<ImagePaths> addImagesForProduct(@RequestBody ImagePaths[] images,@PathVariable(value = "productId") Integer productId){
+		ProductDetails product = sellerService.getProductById(productId);
+		for(ImagePaths image: images) {
+			image.setProduct(product);
+		}
+		return sellerService.addImagesForProduct(images);
 	}
 	
 	@GetMapping("/categories")
@@ -105,5 +121,10 @@ public class TestApi {
 	@GetMapping("/categories/{categoryId}")
 	public CategoryDetails getCategoryById(@PathVariable(value="categoryId") Integer categoryId) {
 		return sellerService.getCategoryById(categoryId);
+	}
+	
+	@PostMapping("/sellers/register")
+	public SellerDetails addSeller(@RequestBody SellerDetails seller) {
+		return sellerService.addSeller(seller);
 	}
 }

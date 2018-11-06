@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 	integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
@@ -30,6 +31,7 @@
 							<form:label path="password">Password</form:label>
 							<form:password path="password" class="form-control rounded-0" />
 						</div>
+						<div class="g-recaptcha" data-sitekey="6LeFv3gUAAAAANfWrmEI-B8BwJBDP3mlqg_TzBja"></div>
 						<form:button id="login" name="login" class="btn btn-primary float-right">Login</form:button>
 					</form:form>
 				</div>

@@ -3,6 +3,8 @@
  */
 package com.nagarro.yourmartapi.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,9 +16,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.nagarro.yourmartapi.entity.CategoryDetails;
+import com.nagarro.yourmartapi.entity.ImagePaths;
 import com.nagarro.yourmartapi.entity.ProductDetails;
 import com.nagarro.yourmartapi.entity.SellerDetails;
 import com.nagarro.yourmartapi.repository.CategoryRepository;
+import com.nagarro.yourmartapi.repository.ImageRepository;
 import com.nagarro.yourmartapi.repository.ProductRepository;
 import com.nagarro.yourmartapi.repository.SellerRepository;
 
@@ -34,6 +38,9 @@ public class SellerPanelService {
 	
 	@Autowired
 	CategoryRepository categoryRepo;
+	
+	@Autowired
+	ImageRepository imageRepo;
 
 	Logger logger = LoggerFactory.getLogger(SellerPanelService.class);
 	
@@ -69,11 +76,21 @@ public class SellerPanelService {
 		return productRepo.findBySellerSellerId(sellerId, pageable);
 	}
 	
-	public ProductDetails addOrUpdateProductForSeller(ProductDetails product) {
+	public ProductDetails addProductForSeller(ProductDetails product) {
+		product.setStatus("NEW");
 		return productRepo.save(product);
 	}
 	
+	public ArrayList<ImagePaths> addImagesForProduct(ImagePaths[] images) {
+		ArrayList<ImagePaths> imagesRes = new ArrayList<>();
+		for(ImagePaths image: images) {
+			imagesRes.add(imageRepo.save(image));	
+		}
+		return imagesRes;
+	}
+	
 	public ProductDetails updateProductForSeller(ProductDetails product) {
+		product.setStatus("REVIEW");
 		return productRepo.save(product);
 	}
 	
@@ -83,5 +100,12 @@ public class SellerPanelService {
 	
 	public CategoryDetails getCategoryById(Integer categoryId) {
 		return categoryRepo.getOne(categoryId);
+	}
+	
+	public SellerDetails addSeller(SellerDetails seller) {
+		seller.setStatus("NEED_APPROVAL");
+		String sha256hexPassword = DigestUtils.sha256Hex(seller.getPassword());
+		seller.setPassword(sha256hexPassword);
+		return sellerRepo.save(seller);
 	}
 }

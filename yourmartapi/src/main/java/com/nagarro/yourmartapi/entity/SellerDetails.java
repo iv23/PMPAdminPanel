@@ -20,7 +20,10 @@ import javax.persistence.TableGenerator;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.nagarro.yourmartapi.util.EntityIdResolver;
 
 /**
  * @author ishaanvashishth
@@ -29,6 +32,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity(name = "sellers")
 @Table(name = "sellers")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "sellerId",
+        resolver = EntityIdResolver.class,
+        scope=SellerDetails.class)
 public class SellerDetails {
 
 	@Id

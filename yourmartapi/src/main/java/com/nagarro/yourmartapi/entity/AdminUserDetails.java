@@ -81,6 +81,12 @@ public class AdminUserDetails {
 		this.password = password;
 	}
 
+	@Override
+	public String toString() {
+		return "AdminUserDetails [id=" + id + ", yourmartId=" + yourmartId + ", email=" + email + ", password="
+				+ password + "]";
+	}
+
 	/**
 	 * @return the id
 	 */

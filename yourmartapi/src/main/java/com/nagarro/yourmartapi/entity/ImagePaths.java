@@ -19,6 +19,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
@@ -49,7 +50,7 @@ public class ImagePaths {
 //    @JsonIgnore
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="productId")
     @JsonIdentityReference(alwaysAsId=true)
-//    @JsonProperty("product_id")
+    @JsonProperty("product_id")
 	private ProductDetails product;
 
 	/**
