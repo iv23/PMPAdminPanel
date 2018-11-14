@@ -1,4 +1,4 @@
-package com.nagarro.yourmartapi;
+package com.nagarro.yourmartapi.controller;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -30,7 +30,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 
 @RestController
 @RequestMapping("/yourmart/sellerapi")
-public class TestApi {
+public class SellerPanelController {
 	@Autowired
 	SellerPanelService sellerService;
 
@@ -40,7 +40,7 @@ public class TestApi {
 	@Autowired
 	ModelMapper modelMapper;
 
-	Logger logger = LoggerFactory.getLogger(TestApi.class);
+	Logger logger = LoggerFactory.getLogger(SellerPanelController.class);
 
 	@PostMapping("/sellers/login")
 	public SellerDetails authenticateSeller(@RequestBody SellerDetails seller) {
@@ -58,7 +58,7 @@ public class TestApi {
 		return sellerService.getSellerById(sellerId);
 	}
 
-	@GetMapping("/products/{productId}")
+	@GetMapping("/sellers/{sellerId}/products/{productId}")
 	public ProductDetails getProductById(@PathVariable(value = "productId") Integer productId) {
 		return sellerService.getProductById(productId);
 	}

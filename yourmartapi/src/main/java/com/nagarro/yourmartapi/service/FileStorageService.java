@@ -61,7 +61,21 @@ public class FileStorageService {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
-
+//   NEW
+//    public String loadFileAsResource(String fileName) {
+//        try {
+//            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+//            Resource resource = new UrlResource(filePath.toUri());
+//            if(resource.exists()) {
+//                return resource.toString();
+//            } else {
+//                throw new MyFileNotFoundException("File not found " + fileName);
+//            }
+//        } catch (MalformedURLException ex) {
+//            throw new MyFileNotFoundException("File not found " + fileName, ex);
+//        }
+//    }
+//    OLD
     public Resource loadFileAsResource(String fileName) {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
