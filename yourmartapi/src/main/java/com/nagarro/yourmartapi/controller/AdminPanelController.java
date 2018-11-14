@@ -130,7 +130,7 @@ public class AdminPanelController {
 			sortDirection="ASC";
 		}
 		
-		OffsetLimitRequest pageable = new OffsetLimitRequest(pageNo - 1, 4, new Sort(Sort.Direction.fromString(sortDirection), sortStr)); 
+		OffsetLimitRequest pageable = new OffsetLimitRequest(4*(pageNo - 1), 4 , new Sort(Sort.Direction.fromString(sortDirection), sortStr)); 
 		if (exp == null) {
 			sellers = service.getAllSellersPageable(pageable);
 		} else {
@@ -172,7 +172,7 @@ public class AdminPanelController {
 			sortDirection="ASC";
 		}
 		
-		OffsetLimitRequest pageable = new OffsetLimitRequest(pageNo - 1, 4, new Sort(Sort.Direction.fromString(sortDirection), sortStr)); 
+		OffsetLimitRequest pageable = new OffsetLimitRequest(4*(pageNo - 1), 4, new Sort(Sort.Direction.fromString(sortDirection), sortStr)); 
 		if (exp == null) {
 			products = service.getAllProductsPageable(pageable);
 		} else {

@@ -40,19 +40,19 @@
 					<tbody>
 						<tr>
 							<th>ID</th>
-							<td>${seller.id}</td>
+							<td>${seller.sellerId}</td>
 						</tr>
 						<tr>
 							<th>Company</th>
-							<td>${seller.company}</td>
+							<td>${seller.companyName}</td>
 						</tr>
 						<tr>
 							<th>Owner</th>
-							<td>${seller.owner}</td>
+							<td>${seller.ownerName}</td>
 						</tr>
 						<tr>
 							<th>Address</th>
-							<td>${seller.address}</td>
+							<td>${seller.address.addressLine1}</td>
 						</tr>
 						<tr>
 							<th>Email</th>
@@ -64,7 +64,7 @@
 						</tr>
 						<tr>
 							<th>Email</th>
-							<td>${seller.gst}</td>
+							<td>${seller.gstNumber}</td>
 						</tr>
 						<tr>
 							<th>Registered On</th>
@@ -78,37 +78,6 @@
 				</table>
 			</div>
 
-			<div class="col-8">
-				<h3>Seller products</h3>
-				<table class="table">
-					<thead>
-						<tr>
-							<th scope="col">Product Code</th>
-							<th scope="col">Product Name</th>
-							<th scope="col">Dimensions</th>
-							<th scope="col">MRP</th>
-							<th scope="col">SSP</th>
-							<th scope="col">YMP</th>
-							<th scope="col">Category</th>
-
-							<th scope="col">Status</th>
-						</tr>
-					</thead>
-					<c:forEach items="${seller.products}" var="product">
-
-						<tr>
-							<td><a href="/products/${product.id}">${product.productCode }</a></td>
-							<td>${product.productName }</td>
-							<td>${product.dimensions }</td>
-							<td>${product.mrp }</td>
-							<td>${product.ssp }</td>
-							<td>${product.ymp }</td>
-							<td>${product.category.name }</td>
-							<td>${product.status }</td>
-						</tr>
-					</c:forEach>
-				</table>
-			</div>
 		</div>
 	</div>
 </body>

@@ -64,16 +64,8 @@ public class SellerPanelController {
 	}
 
 	@GetMapping(value = "/sellers/{sellerId}/products")
-	public Page<ProductDetails> findPaginated(@PathVariable(value = "sellerId") Integer sellerId, Pageable pageable) {
-
-		Page<ProductDetails> pages = productsRepository.findBySellerSellerId(sellerId, pageable);
-		return pages;
-	}
-
-	@GetMapping(value = "/sellers/{sellerId}/products/filter")
 	public Page<ProductDetails> findPaginated(@PathVariable(value = "sellerId") Integer sellerId,
-			@RequestParam(value = "search") String search, Pageable pageable) {
-//		search = search + ",seller:" + Integer.toString(sellerId);
+			@RequestParam(value = "search", required=false) String search, Pageable pageable) {
 		ProductPredicatesBuilder builder = new ProductPredicatesBuilder();
 		if (search != null) {
 			Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
@@ -86,6 +78,22 @@ public class SellerPanelController {
 		
 		return productsRepository.findAll(exp, pageable);
 	}
+
+//	@GetMapping(value = "/sellers/{sellerId}/products/filter")
+//	public Page<ProductDetails> findPaginated(@PathVariable(value = "sellerId") Integer sellerId,
+//			@RequestParam(value = "search") String search, Pageable pageable) {
+//		ProductPredicatesBuilder builder = new ProductPredicatesBuilder();
+//		if (search != null) {
+//			Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+//			Matcher matcher = pattern.matcher(search + ",");
+//			while (matcher.find()) {
+//				builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+//			}
+//		}
+//		BooleanExpression exp = builder.build();
+//		
+//		return productsRepository.findAll(exp, pageable);
+//	}
 
 	@PostMapping("/sellers/{sellerId}/products")
 	public ProductDetails addProduct(@RequestBody ProductDetails product,@PathVariable(value = "sellerId") Integer sellerId){
